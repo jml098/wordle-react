@@ -24,6 +24,7 @@ export default class Wordle {
       wrongLetters: this.wrongLetters,
       possibleLetters: this.possibleLetters,
       correctLetters: this.correctLetters,
+      guessIndex: this.guessIndex,
       gameOver: this.gameOver,
       gameWon: this.gameWon,
       gameLost: this.gameLost,

@@ -1,50 +1,36 @@
-body {
-  backrgound-color: #4e7a27;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.board {
+.keyboard {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #333333;
   width: 100%;
-  padding: 5px;
-  border-radius: 20px 20px 0 0;
+  border-radius: 0 0 20px 20px;
 }
 
-.row {
+.keyboard-row {
   display: flex;
   align-items: center;
-  jusify-content: center;
-  width: 100%;
-  
+  justify-content: center;
 }
 
-
-.cell{
+.keyboard-button-container{
     position: relative;
     width: 100%;
     overflow: hidden;
-  border-radius: 10px;
-  margin: 5px;
-  transition: background-color 0.5s ease-out, color 0.5s ease-out;
+    padding: 5px 0 5px 0;
 }
-.cell:before{
+.keyboard-button-container:before{
     content: "";
     display: block;
     padding-top: 100%;
 }
-.cell-content{
+.keyboard-button{
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  font-size: 2rem;
+  font-size: 1rem;
   font-family: "Roboto", sans-serif;
     position:  absolute;
     top: 0;
@@ -52,9 +38,12 @@ body {
     bottom: 0;
     right: 0;
     text-align: center;
+  background-color: gray;
+  width: 80%;
+  height: 90%;
+  
+  margin: auto auto;
+  border-radius: 10px
+  
 
-}
-
-.a {
-  backgroud-color: #64c466;
 }

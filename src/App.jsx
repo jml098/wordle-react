@@ -2,6 +2,8 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import Wordle from "./../Wordle.js";
 import vocabulary from "./../words.json";
+import Keyboard from "./Keyboard.jsx";
+import colors from "./colors.js";
 
 export default function App() {
   const [game, setGame] = useState(
@@ -14,52 +16,97 @@ export default function App() {
 
   const [guess, setGuess] = useState("");
 
+  function handleRestart() {
+    setGame(new Wordle(6, 6, vocabulary));
+    setGameState(game.state);
+    setGuess("");
+  }
+
   function submitGuess() {
     setGameState(game.submitGuess(guess).state);
+    setGuess("");
+  }
+
+  function getCellColor(evaluation) {
+    return evaluation === 1
+      ? colors.green
+      : evaluation === 2
+        ? colors.yellow
+        : evaluation === 0
+          ? colors.darkGray
+          : colors.gray;
+  }
+
+  function handleType(letter) {
+    if (guess.length < game.wordLength)
+      setGuess(guess + letter);
+  }
+
+  function handleErase() {
+    if (guess.length > 0) setGuess(guess.slice(0, -1));
   }
 
   return (
     <main>
       <div className="board">
-        {game.guesses.map((guess, y) => (
+        {gameState.guesses.map((g, y) => (
           <div className="row" key={y}>
-            {guess.map((char, x) => {
+            {g.map((char, x) => {
               const evaluation =
-                gameState.guessEvaluations[y][x];
-              const backgroundColor =
-                evaluation === 1
-                  ? "green"
-                  : evaluation === 2
-                    ? "yellow"
-                    : "gray";
-              const color = "white";
-              return (
-                <div
-                  className="cell"
-                  key={x}
-                  style={{ backgroundColor, color }}
-                >
+                  gameState.guessEvaluations[y][x],
+                backgroundColor =
+                  getCellColor(evaluation),
+                color = char ? "white" : "transparent",
+                transitionDelay = 0.075 * x + "s";
+
+              if (gameState.guessIndex !== y) {
+                return (
                   <div
-                    className="cell-content"
+                    className="cell"
+                    key={x}
+                    style={{
+                      transitionDelay,
+                      backgroundColor,
+                      color,
+                    }}
                   >
-                    {char}
+                    <div className="cell-content">
+                      {char}
+                    </div>
                   </div>
-                </div>
-              );
+                );
+              } else {
+                return (
+                  <div
+                    className="cell"
+                    key={x}
+                    style={{
+                      transitionDelay,
+                      backgroundColor: "darkgray",
+                      color: "white",
+                    }}
+                  >
+                    <div className="cell-content">
+                      {guess[x] || ""}
+                    </div>
+                  </div>
+                );
+              }
             })}
           </div>
         ))}
       </div>
-      <input
-        type="text"
-        value={guess}
-        onChange={(e) =>
-          setGuess(e.target.value.toLowerCase())
-        }
-      ></input>
-      <button onClick={() => submitGuess(guess)}>
-        Guess
-      </button>
+      <Keyboard
+        onType={handleType}
+        onSubmit={submitGuess}
+        onErase={handleErase}
+        onRestart={handleRestart}
+        letterSets={{
+          correct: gameState.correctLetters,
+          possible: gameState.possibleLetters,
+          wrong: gameState.wrongLetters,
+        }}
+      />
     </main>
   );
 }
