@@ -1,0 +1,50 @@
+main {
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #333333;
+  width: 100%
+  
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  jusify-content: center;
+  width: 100%;
+  
+}
+
+
+.cell{
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  border-radius: 10px;
+  margin: 5px;
+  transition: background-color 0.5s ease-out, color 0.5s ease-out;
+}
+.cell:before{
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+.cell-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-family: "Roboto", sans-serif;
+    position:  absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+
+}
