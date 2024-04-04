@@ -48,6 +48,52 @@ export default function App() {
 
   return (
     <main>
+      {gameState.gameOver && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 5,
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            fontFamily: "Roboto, sans-serif",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <h1
+            style={{
+              color: gameState.gameWon
+                ? colors.green
+                : colors.red,
+            }}
+          >
+            {gameState.gameWon
+              ? "You won!"
+              : "You lost!"}
+          </h1>
+          <div
+            onClick={handleRestart}
+            style={{
+              width: "fit-content",
+              height: "fit-content",
+              backgroundColor: colors.gray,
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "white",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              padding: "10px",
+            }}
+          >
+            Restart
+          </div>
+        </div>
+      )}
       <div className="board">
         {gameState.guesses.map((g, y) => (
           <div className="row" key={y}>

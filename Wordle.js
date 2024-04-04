@@ -19,6 +19,8 @@ export default class Wordle {
 
   get state() {
     return {
+      word: this.word,
+      guess: this.guess,
       guesses: this.guesses,
       guessEvaluations: this.guessEvaluations,
       wrongLetters: this.wrongLetters,
@@ -47,7 +49,8 @@ export default class Wordle {
   }
 
   get gameWon() {
-    return this.guess === this.word;
+    if (!this.guess) return false;
+    return this.guess.join("") === this.word;
   }
 
   get gameLost() {
