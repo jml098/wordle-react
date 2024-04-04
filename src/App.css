@@ -1,5 +1,5 @@
 body {
-  backrgound-color: #4e7a27;
+  backgound-color: #4e7a27;
 }
 
 * {
@@ -20,7 +20,7 @@ body {
 .row {
   display: flex;
   align-items: center;
-  jusify-content: center;
+  justify-content: center;
   width: 100%;
 }
 
@@ -34,11 +34,13 @@ body {
     background-color 0.5s ease-out,
     color 0.5s ease-out;
 }
+
 .cell:before {
   content: "";
   display: block;
   padding-top: 100%;
 }
+
 .cell-content {
   display: flex;
   align-items: center;
