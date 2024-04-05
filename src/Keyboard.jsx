@@ -5,8 +5,8 @@ export default function Keyboard({
   onType,
   onErase,
   onSubmit,
-  onRestart, 
-  letterSets
+  onRestart,
+  letterSets,
 }) {
   const keyboardLayout = [
     ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -28,21 +28,29 @@ export default function Keyboard({
             }}
           >
             {row.map((letter, letterIndex) => {
-            const backgroundColor = letterSets.correct.has(letter) 
-            ? colors.green
-              : letterSets.possible.has(letter)
-            ?colors.yellow
-              : letterSets.wrong.has(letter)
-            ? colors.darkGray
-              : colors.gray
+              const backgroundColor =
+                letterSets.correct.has(letter)
+                  ? colors.green
+                  : letterSets.possible.has(letter)
+                    ? colors.yellow
+                    : letterSets.wrong.has(letter)
+                      ? colors.darkGray
+                      : colors.gray;
               return (
                 <div
                   className="keyboard-button-container"
                   key={letterIndex}
-                  onClick={() => onType(letter)}
+                  onClick={() => {
+                    onType(letter);
+                    if (!window?.navigator?.vibrate)
+                      return;
+                    window.navigator.vibrate(100);
+                  }}
                 >
-                  <div className="keyboard-button" 
-                    style={{backgroundColor}}>
+                  <div
+                    className="keyboard-button"
+                    style={{ backgroundColor }}
+                  >
                     {letter}
                   </div>
                 </div>

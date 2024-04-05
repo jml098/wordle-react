@@ -14,13 +14,13 @@ export default function App() {
 
   useEffect(() => {
     fetch(
-      "https://raw.githubusercontent.com/jml098/wordle-react/main/words.json"
+      "https://raw.githubusercontent.com/jml098/wordle-react/main/words.json",
     )
       .then((response) => response.text())
       .then((data) => {
         const vocabulary = JSON.parse(data);
         setVocabulary(vocabulary);
-        const game = new Wordle(6,6, vocabulary);
+        const game = new Wordle(6, 6, vocabulary);
         setGame(game);
         setGameState(game.state);
       });
@@ -119,15 +119,22 @@ export default function App() {
                       : "transparent",
                     transitionDelay = 0.075 * x + "s";
 
+                  let className = "cell";
+                  if (evaluation === 1)
+                    className += " animate-grow";
+
+                let animationDelay = 0.075 * x + "s";
+
                   if (gameState.guessIndex !== y) {
                     return (
                       <div
-                        className="cell"
+                        className={className}
                         key={x}
                         style={{
                           transitionDelay,
                           backgroundColor,
                           color,
+                          animationDelay
                         }}
                       >
                         <div className="cell-content">
@@ -168,9 +175,9 @@ export default function App() {
             }}
           />
         </main>
-      )
-      : <h1>Loading...</h1>
-      }
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </div>
   );
 }
