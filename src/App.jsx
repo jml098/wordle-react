@@ -57,7 +57,7 @@ export default function App() {
 
   return (
     <div>
-      {gameState && (
+      {gameState ? (
         <main>
           {gameState.gameOver && (
             <div
@@ -167,7 +167,9 @@ export default function App() {
             }}
           />
         </main>
-      )}
+      )
+      : <h1>Loading...</h1>
+      }
     </div>
   );
 }
