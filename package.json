@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "description": "React TypeScript on Replit, using Vite bundler",
+  "homepage": "https://jml098.github.io/wordle-react/",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=./",
+    "deploy": "gh-pages -d dist",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "keywords": [],
@@ -19,5 +21,8 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "gh-pages": "^6.1.1"
   }
 }
