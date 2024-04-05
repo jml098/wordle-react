@@ -40,12 +40,7 @@ export default function Keyboard({
                 <div
                   className="keyboard-button-container"
                   key={letterIndex}
-                  onClick={() => {
-                    onType(letter);
-                    if (!window?.navigator?.vibrate)
-                      return;
-                    window.navigator.vibrate(100);
-                  }}
+                  onClick={() => onType(letter)}
                 >
                   <div
                     className="keyboard-button"
