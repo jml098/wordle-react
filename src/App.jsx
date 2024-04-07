@@ -8,6 +8,11 @@ export default function App() {
   const [vocabulary, setVocabulary] = useState([]);
   const [game, setGame] = useState(null);
 
+  const [settings, setSettings] = useState(true)
+
+  const [rows, setRows] = useState(6);
+  const [cols, setCols] = useState(6);
+
   const [gameState, setGameState] = useState(null);
 
   const [guess, setGuess] = useState("");
@@ -20,15 +25,24 @@ export default function App() {
       .then((data) => {
         const vocabulary = JSON.parse(data);
         setVocabulary(vocabulary);
-        const game = new Wordle(6, 6, vocabulary);
+        const game = new Wordle(
+          rows,
+          cols,
+          vocabulary,
+        );
         setGame(game);
         setGameState(game.state);
       });
   }, []);
 
   function handleRestart() {
-    setGame(new Wordle(6, 6, vocabulary));
-    setGameState(game.state);
+    const newGame = new Wordle(
+      rows,
+      cols,
+      vocabulary,
+    )
+    setGame(newGame);
+    setGameState(newGame.state);
     setGuess("");
   }
 
@@ -106,62 +120,72 @@ export default function App() {
               </div>
             </div>
           )}
-          <div className="board">
-            {gameState.guesses.map((g, y) => (
-              <div className="row" key={y}>
-                {g.map((char, x) => {
-                  const evaluation =
-                      gameState.guessEvaluations[y][x],
-                    backgroundColor =
-                      getCellColor(evaluation),
-                    color = char
-                      ? "white"
-                      : "transparent",
-                    transitionDelay = 0.075 * x + "s";
+          <div className="grid">
+            {gameState.guesses.map((g, y) => {
+              const style = {};
+          if (rows < cols) style.width = "100%";
+          else style.height = "100%";
+              return (
+                <div className="row" style={style} key={y}>
+                  {g.map((char, x) => {
+                    const evaluation =
+                        gameState.guessEvaluations[y][
+                          x
+                        ],
+                      backgroundColor =
+                        getCellColor(evaluation),
+                      color = char
+                        ? "white"
+                        : "transparent",
+                      transitionDelay =
+                        0.075 * x + "s";
 
-                  let className = "cell";
-                  if (evaluation === 1)
-                    className += " animate-grow";
+                    let className = "cell";
+                    if (evaluation === 1)
+                      className += " animate-grow";
 
-                let animationDelay = 0.075 * x + "s";
+                    let animationDelay =
+                      0.075 * x + "s";
 
-                  if (gameState.guessIndex !== y) {
-                    return (
-                      <div
-                        className={className}
-                        key={x}
-                        style={{
-                          transitionDelay,
-                          backgroundColor,
-                          color,
-                          animationDelay
-                        }}
-                      >
-                        <div className="cell-content">
+                    if (gameState.guessIndex !== y) {
+                      return (
+                        <div
+                          className={className}
+                          key={x}
+                          style={{
+                            transitionDelay,
+                            backgroundColor,
+                            color,
+                            animationDelay,
+                            ...style
+                          }}
+                        >
                           {char}
                         </div>
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div
-                        className="cell"
-                        key={x}
-                        style={{
-                          transitionDelay,
-                          backgroundColor: "darkgray",
-                          color: "white",
-                        }}
-                      >
-                        <div className="cell-content">
-                          {guess[x] || ""}
+                      );
+                    } else {
+                      return (
+                        <div
+                          className="cell"
+                          key={x}
+                          style={{
+                            transitionDelay,
+                            backgroundColor:
+                              "darkgray",
+                            color: "white",
+                            ...style
+                          }}
+                        >
+                          <div className="cell-content">
+                            {guess[x] || ""}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  }
-                })}
-              </div>
-            ))}
+                      );
+                    }
+                  })}
+                </div>
+              );
+            })}
           </div>
           <Keyboard
             onType={handleType}
