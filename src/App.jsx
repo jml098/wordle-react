@@ -8,7 +8,7 @@ export default function App() {
   const [vocabulary, setVocabulary] = useState([]);
   const [game, setGame] = useState(null);
 
-  const [settings, setSettings] = useState(true)
+  const [settings, setSettings] = useState(true);
 
   const [rows, setRows] = useState(6);
   const [cols, setCols] = useState(6);
@@ -36,14 +36,13 @@ export default function App() {
   }, []);
 
   function handleRestart() {
-    const newGame = new Wordle(
-      rows,
-      cols,
-      vocabulary,
-    )
+    const newGame = new Wordle(rows, cols, vocabulary);
     setGame(newGame);
     setGameState(newGame.state);
     setGuess("");
+    setSettings(false)
+
+    console.log(newGame.state)
   }
 
   function submitGuess() {
@@ -72,135 +71,179 @@ export default function App() {
 
   return (
     <div>
-      {gameState ? (
-        <main>
-          {gameState.gameOver && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 5,
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                fontFamily: "Roboto, sans-serif",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <h1
-                style={{
-                  color: gameState.gameWon
-                    ? colors.green
-                    : colors.red,
-                }}
-              >
-                {gameState.gameWon
-                  ? "You won!"
-                  : "You lost!"}
-              </h1>
-              <div
-                onClick={handleRestart}
-                style={{
-                  width: "fit-content",
-                  height: "fit-content",
-                  backgroundColor: colors.gray,
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "white",
-                  fontSize: "2rem",
-                  fontWeight: "bold",
-                  padding: "10px",
-                }}
-              >
-                Restart
-              </div>
-            </div>
-          )}
-          <div className="grid">
-            {gameState.guesses.map((g, y) => {
-              const style = {};
-          if (rows < cols) style.width = "100%";
-          else style.height = "100%";
-              return (
-                <div className="row" style={style} key={y}>
-                  {g.map((char, x) => {
-                    const evaluation =
-                        gameState.guessEvaluations[y][
-                          x
-                        ],
-                      backgroundColor =
-                        getCellColor(evaluation),
-                      color = char
-                        ? "white"
-                        : "transparent",
-                      transitionDelay =
-                        0.075 * x + "s";
+      {settings ? (
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "30px"
+        }}>
+          <label>
+            Tentativi:
+            <select value={rows} style={{
+          fontSize: "30px",
+            }} onChange={(e) => setRows(parseInt(e.target.value))}>
+              {[2,3,4,5,6,7,8,9,10].map((i) => (
+                <option key={i} value={i}>{i}</option>
+              ))}
+            </select>
+          </label>
 
-                    let className = "cell";
-                    if (evaluation === 1)
-                      className += " animate-grow";
-
-                    let animationDelay =
-                      0.075 * x + "s";
-
-                    if (gameState.guessIndex !== y) {
-                      return (
-                        <div
-                          className={className}
-                          key={x}
-                          style={{
-                            transitionDelay,
-                            backgroundColor,
-                            color,
-                            animationDelay,
-                            ...style
-                          }}
-                        >
-                          {char}
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div
-                          className="cell"
-                          key={x}
-                          style={{
-                            transitionDelay,
-                            backgroundColor:
-                              "darkgray",
-                            color: "white",
-                            ...style
-                          }}
-                        >
-                          <div className="cell-content">
-                            {guess[x] || ""}
-                          </div>
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              );
-            })}
-          </div>
-          <Keyboard
-            onType={handleType}
-            onSubmit={submitGuess}
-            onErase={handleErase}
-            onRestart={handleRestart}
-            letterSets={{
-              correct: gameState.correctLetters,
-              possible: gameState.possibleLetters,
-              wrong: gameState.wrongLetters,
-            }}
-          />
-        </main>
+          <label>
+            Lunghezza parola:
+            <select value={cols} style={{fontSize: "30px"}} onChange={(e) => setCols(parseInt(e.target.value))}>
+              {[3,4,5,6,7,8,9,10].map((i) => (
+                <option key={i} value={i}>{i}</option>
+              ))}
+            </select>
+          </label>
+          <button style={{
+          fontSize: "30px",
+          }} onClick={() => handleRestart()}>Inizia</button>
+        </div>
       ) : (
-        <h1>Loading...</h1>
+        <div>
+          {gameState ? (
+            <main>
+              {gameState.gameOver && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 5,
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    fontFamily: "Roboto, sans-serif",
+                    backgroundColor:
+                      "rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  <h1
+                    style={{
+                      color: gameState.gameWon
+                        ? colors.green
+                        : colors.red,
+                    }}
+                  >
+                    {gameState.gameWon
+                      ? "You won!"
+                      : "You lost!"}
+                  </h1>
+                  <div
+                    onClick={handleRestart}
+                    style={{
+                      width: "fit-content",
+                      height: "fit-content",
+                      backgroundColor: colors.gray,
+                      borderRadius: "10px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      color: "white",
+                      fontSize: "2rem",
+                      fontWeight: "bold",
+                      padding: "10px",
+                    }}
+                  >
+                    Restart
+                  </div>
+                </div>
+              )}
+              <div className="grid">
+                {gameState.guesses.map((g, y) => {
+                  const style = {};
+                  if (rows < cols)
+                    style.width = "100%";
+                  else style.height = "100%";
+                  return (
+                    <div
+                      className="row"
+                      style={style}
+                      key={y}
+                    >
+                      {g.map((char, x) => {
+                        const evaluation =
+                            gameState.guessEvaluations[
+                              y
+                            ][x],
+                          backgroundColor =
+                            getCellColor(evaluation),
+                          color = char
+                            ? "white"
+                            : "transparent",
+                          transitionDelay =
+                            0.075 * x + "s";
+
+                        let className = "cell";
+                        if (evaluation === 1)
+                          className += " animate-grow";
+
+                        let animationDelay =
+                          0.075 * x + "s";
+
+                        if (
+                          gameState.guessIndex !== y
+                        ) {
+                          return (
+                            <div
+                              className={className}
+                              key={x}
+                              style={{
+                                transitionDelay,
+                                backgroundColor,
+                                color,
+                                animationDelay,
+                                ...style,
+                              }}
+                            >
+                              {char}
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div
+                              className="cell"
+                              key={x}
+                              style={{
+                                transitionDelay,
+                                backgroundColor:
+                                  "darkgray",
+                                color: "white",
+                                ...style,
+                              }}
+                            >
+                              <div className="cell-content">
+                                {guess[x] || ""}
+                              </div>
+                            </div>
+                          );
+                        }
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+              <Keyboard
+                onType={handleType}
+                onSubmit={submitGuess}
+                onErase={handleErase}
+                onRestart={handleRestart}
+                onSettings={() => setSettings(true)}
+                letterSets={{
+                  correct: gameState.correctLetters,
+                  possible: gameState.possibleLetters,
+                  wrong: gameState.wrongLetters,
+                }}
+              />
+            </main>
+          ) : (
+            <h1>Loading...</h1>
+          )}
+        </div>
       )}
     </div>
   );

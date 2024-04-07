@@ -5,6 +5,7 @@ export default function Keyboard({
   onType,
   onErase,
   onSubmit,
+  onSettings,
   onRestart,
   letterSets,
 }) {
@@ -68,7 +69,7 @@ export default function Keyboard({
         </div>
         <div
           className="keyboard-button-container"
-          onClick={onRestart}
+          onClick={onSettings}
         >
           <div className="keyboard-button">{"⟲"}</div>
         </div>
