@@ -27,6 +27,7 @@ export default function App({lang}) {
     )
       .then((response) => response.text())
       .then((data) => {
+        console.log(data)
         const vocabulary = JSON.parse(data);
         setVocabulary(vocabulary);
         const game = new Wordle(
