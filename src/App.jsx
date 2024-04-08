@@ -4,22 +4,26 @@ import Wordle from "./../Wordle.js";
 import Keyboard from "./Keyboard.jsx";
 import colors from "./colors.js";
 
-export default function App() {
+export default function App({lang}) {
   const [vocabulary, setVocabulary] = useState([]);
   const [game, setGame] = useState(null);
 
   const [settings, setSettings] = useState(true);
 
   const [rows, setRows] = useState(6);
-  const [cols, setCols] = useState(6);
+  const [cols, setCols] = useState(5);
 
   const [gameState, setGameState] = useState(null);
 
   const [guess, setGuess] = useState("");
 
   useEffect(() => {
+
+    const url = `https://raw.githubusercontent.com/jml098/wordle-react/main/${lang}-words.json`
+    
+    
     fetch(
-      "https://raw.githubusercontent.com/jml098/wordle-react/main/words.json",
+      url
     )
       .then((response) => response.text())
       .then((data) => {
@@ -32,7 +36,12 @@ export default function App() {
         );
         setGame(game);
         setGameState(game.state);
-      });
+      })
+    .catch((error) => {
+      console.error(error);
+    })
+
+    
   }, []);
 
   function handleRestart() {
@@ -41,8 +50,6 @@ export default function App() {
     setGameState(newGame.state);
     setGuess("");
     setSettings(false)
-
-    console.log(newGame.state)
   }
 
   function submitGuess() {
@@ -79,6 +86,7 @@ export default function App() {
           alignItems: "center",
           fontSize: "30px"
         }}>
+          <h1>{lang}</h1>
           <label>
             Tentativi:
             <select value={rows} style={{
@@ -90,14 +98,15 @@ export default function App() {
             </select>
           </label>
 
-          <label>
+          {lang == "it" && <label>
             Lunghezza parola:
             <select value={cols} style={{fontSize: "30px"}} onChange={(e) => setCols(parseInt(e.target.value))}>
               {[3,4,5,6,7,8,9,10].map((i) => (
                 <option key={i} value={i}>{i}</option>
               ))}
             </select>
-          </label>
+          </label>}
+          
           <button style={{
           fontSize: "30px",
           }} onClick={() => handleRestart()}>Inizia</button>
